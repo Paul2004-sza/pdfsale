@@ -1,14 +1,22 @@
+import os
 from flask import Flask, render_template, send_from_directory, request, redirect, url_for
 import stripe
 
+# Set your secret API key
+
+# The rest of your Flask code
 app = Flask(__name__)
 
-# Stripe API keys (use your real Stripe keys here)
+# Set Stripe API keys using environment variables
 stripe_keys = {
-    'publishable_key': 'pk_test_51Q4MrsGO7zMrqrol9cbQxF3Eub5nsKhRvNcHrB0wtMqzBXgQ0tIcXdw96zZDRXhgmPcEjYbAG41zqHoZi6HeItLh00DYJVgP3e',  # Replace with your publishable key
-    'secret_key': 'sk_test_51Q4MrsGO7zMrqrolrf4oCilbyrZQyJBxCOkgtlej42zuOy6p4H4aAiVJGsEshQJRK2Aa4vJxAb06xqS4bAQohJfp00PPvZbqne'       # Replace with your secret key
+    'publishable_key': os.getenv('pk_test_51Q4MrsGO7zMrqrol9cbQxF3Eub5nsKhRvNcHrB0wtMqzBXgQ0tIcXdw96zZDRXhgmPcEjYbAG41zqHoZi6HeItLh00DYJVgP3e'),
+    'secret_key': os.getenv('sk_test_51Q4MrsGO7zMrqrolrf4oCilbyrZQyJBxCOkgtlej42zuOy6p4H4aAiVJGsEshQJRK2Aa4vJxAb06xqS4bAQohJfp00PPvZbqne'),
 }
-stripe.api_key = stripe_keys['secret_key']
+
+stripe.api_key = 'sk_test_51Q4MrsGO7zMrqrolrf4oCilbyrZQyJBxCOkgtlej42zuOy6p4H4aAiVJGsEshQJRK2Aa4vJxAb06xqS4bAQohJfp00PPvZbqne'  # Use your secret key here
+
+
+# Your other Flask code here...
 
 # Folder where your PDFs are stored
 UPLOAD_FOLDER = r'C:\Users\Sut Zaw Aung\OneDrive\Desktop\products'
