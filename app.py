@@ -1,15 +1,19 @@
 import os
-from flask import Flask, render_template, send_from_directory, request, redirect, url_for
 import stripe
+from flask import Flask, render_template, send_from_directory, request, redirect, url_for
+from dotenv import load_dotenv
 
 app = Flask(__name__)
 
+
+load_dotenv()
+
 stripe_keys = {
-    'publishable_key': os.getenv('pk_test_51Q4MrsGO7zMrqrol9cbQxF3Eub5nsKhRvNcHrB0wtMqzBXgQ0tIcXdw96zZDRXhgmPcEjYbAG41zqHoZi6HeItLh00DYJVgP3e'),
-    'secret_key': os.getenv('sk_test_51Q4MrsGO7zMrqrolrf4oCilbyrZQyJBxCOkgtlej42zuOy6p4H4aAiVJGsEshQJRK2Aa4vJxAb06xqS4bAQohJfp00PPvZbqne'),
+    'publishable_key': os.getenv('STRIPE_PUBLISHABLE_KEY'),
+    'secret_key': os.getenv('STRIPE_SECRET_KEY'),
 }
 
-stripe.api_key = 'sk_test_51Q4MrsGO7zMrqrolrf4oCilbyrZQyJBxCOkgtlej42zuOy6p4H4aAiVJGsEshQJRK2Aa4vJxAb06xqS4bAQohJfp00PPvZbqne'
+stripe.api_key = stripe_keys['secret_key']
 
 
 UPLOAD_FOLDER = r'C:\Users\Sut Zaw Aung\OneDrive\Desktop\products'
@@ -31,7 +35,6 @@ def product_detail(product_id):
     if product:
         return render_template('product_detail.html', product=product, stripe_key=stripe_keys['publishable_key'])
     return "Product not found", 404
-
 
 @app.route('/create-checkout-session', methods=['POST'])
 def create_checkout_session():
@@ -60,7 +63,6 @@ def create_checkout_session():
     )
     return redirect(session.url, code=303)
 
-# Payment success and cancel routes
 @app.route('/success')
 def payment_success():
     return "Payment Successful! Thank you for your purchase."
@@ -68,6 +70,7 @@ def payment_success():
 @app.route('/cancel')
 def payment_cancel():
     return "Payment Cancelled."
+
 
 @app.route('/download/<filename>')
 def download_file(filename):
