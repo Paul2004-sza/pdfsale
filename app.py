@@ -2,12 +2,10 @@ import os
 import stripe
 from flask import Flask, render_template, send_from_directory, request, redirect, url_for
 from dotenv import load_dotenv
-import fitz  # PyMuPDF
+import fitz
 
-# Initialize Flask app
 app = Flask(__name__)
 
-# Load environment variables
 load_dotenv()
 
 stripe_keys = {
@@ -16,12 +14,11 @@ stripe_keys = {
 }
 stripe.api_key = stripe_keys['secret_key']
 
-# Folder configurations
+
 UPLOAD_FOLDER = os.path.join('static', 'products')
 PREVIEW_FOLDER = os.path.join('static', 'product_previews')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Product class to manage products
 class Product:
     def __init__(self, id, name, price, file):
         self.id = id
@@ -30,29 +27,28 @@ class Product:
         self.file = file
         self.preview_url = None
 
-# Example products
 products = [
     Product(1, 'PDF file 1', 10, 'doc1.pdf'),
     Product(2, 'PDF file 2', 15, 'doc2.pdf'),
     Product(3, 'PDF file 3', 20, 'doc3.pdf'),
 ]
 
-# Function to generate PDF previews
+
 def generate_pdf_preview(pdf_file, preview_filename):
     if not os.path.exists(PREVIEW_FOLDER):
         os.makedirs(PREVIEW_FOLDER)
 
     preview_path = os.path.join(PREVIEW_FOLDER, preview_filename)
     try:
-        # Open the PDF and generate the first page preview
+
         with fitz.open(pdf_file) as doc:
-            page = doc[0]  # Load the first page
+            page = doc[0]
             pix = page.get_pixmap()
             pix.save(preview_path)
     except Exception as e:
         print(f"Error generating PDF preview for {pdf_file}: {e}")
 
-# Routes
+
 @app.route('/')
 def index():
     for product in products:
@@ -119,6 +115,6 @@ def download_preview(filename):
         print(f"Error downloading preview: {e}")
         return "File not found", 404
 
-# Run the app
+
 if __name__ == '__main__':
     app.run(debug=True)
