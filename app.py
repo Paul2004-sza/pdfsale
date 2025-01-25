@@ -4,20 +4,16 @@ from flask import Flask, render_template, send_from_directory, request, redirect
 from dotenv import load_dotenv
 import fitz
 
-# Flask app initialization
 app = Flask(__name__)
 
-# Load environment variables
 load_dotenv()
 
-# Stripe keys
 stripe_keys = {
     'publishable_key': os.getenv('STRIPE_PUBLISHABLE_KEY'),
     'secret_key': os.getenv('STRIPE_SECRET_KEY'),
 }
 stripe.api_key = stripe_keys['secret_key']
 
-# File paths
 UPLOAD_FOLDER = r'static\products'
 PREVIEW_FOLDER = r'static\product_previews'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
